@@ -90,7 +90,7 @@ void readData() {
 void initSDLNet() {
 	/* Initialize the network */
 	if ( SDLNet_Init() < 0 ) {
-		std::cerr <<  "Couldn't initialize SDL net: " << SDLNet_GetError()) << std::endl;
+		std::cerr <<  "Couldn't initialize SDL net: " << SDLNet_GetError() << std::endl;
 		SDL_Quit();
 		exit(1);
 	}
