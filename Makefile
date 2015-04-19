@@ -7,6 +7,8 @@ VERSION := 1.6.0
 VERSION := $(shell sh scripts/version.sh "$(BUILD)" "$(VERSION)" \
 	"share/version.in.h" "share/version.h" ".version")
 
+ENABLE_TILT := network
+
 $(info Will make a "$(BUILD)" build of Neverball $(VERSION).)
 
 #------------------------------------------------------------------------------
@@ -148,6 +150,10 @@ ifeq ($(ENABLE_TILT),loop)
 else
 ifeq ($(ENABLE_TILT),leapmotion)
 	TILT_LIBS := /usr/lib/Leap/libLeap.so -Wl,-rpath,/usr/lib/Leap
+else
+ifeq ($(ENABLE_TILT),network)
+	TILT_LIBS := -lSDL2_net
+endif
 endif
 endif
 endif
@@ -360,7 +366,11 @@ else
 ifeq ($(ENABLE_TILT),leapmotion)
 BALL_OBJS += share/tilt_leapmotion.o
 else
+ifeq ($(ENABLE_TILT),network)
+BALL_OBJS += share/tilt_network.o
+else
 BALL_OBJS += share/tilt_null.o
+endif
 endif
 endif
 endif
@@ -425,7 +435,11 @@ else
 ifeq ($(ENABLE_TILT),leapmotion)
 LINK := $(CXX) $(ALL_CXXFLAGS)
 else
+ifeq ($(ENABLE_TILT),network)
+LINK := $(CXX) $(ALL_CXXFLAGS)
+else
 LINK := $(CC) $(ALL_CFLAGS)
+endif
 endif
 endif
 
